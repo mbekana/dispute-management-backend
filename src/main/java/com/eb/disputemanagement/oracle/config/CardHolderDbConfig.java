@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 @EnableJpaRepositories(
 		entityManagerFactoryRef = "cardHolderEntityManagerFactory",
 		transactionManagerRef = "cardHolderTransactionManager",
-		basePackages = {"com.enatbanksc.disputemanagement.oracle.cardholder"}
+		basePackages = {"com.eb.disputemanagement.oracle.cardholder"}
 )
 public class CardHolderDbConfig {
 
@@ -38,7 +38,7 @@ public class CardHolderDbConfig {
 	{
 		return builder
 				.dataSource(dataSource)
-				.packages("com.enatbanksc.disputemanagement.oracle.cardholder")
+				.packages("com.eb.disputemanagement.oracle.cardholder")
 				.persistenceUnit("cardholder")
 				.build();
 	}

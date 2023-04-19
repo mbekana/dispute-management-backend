@@ -20,16 +20,16 @@ stages{
      stage("Build Docker"){
         steps{
            script{
-               docker.build("10.1.12.73:5000/dispute_management_backend.git:${TAG}")
+               docker.build("*.*.*.*:*/dispute_management_backend.git:${TAG}")
            }
         }
     }
     stage("Push Docker Image to Local Registry"){
         steps{
            script{
-               docker.withRegistry("http://10.1.12.73:5000"){
-                   docker.image("10.1.12.73:5000/dispute_management_backend.git:${TAG}").push()
-                   docker.image("10.1.12.73:5000/dispute_management_backend.git:${TAG}").push("latest")
+               docker.withRegistry("http://*.*.*.*:*"){
+                   docker.image("*.*.*.*:*/dispute_management_backend.git:${TAG}").push()
+                   docker.image("*.*.*.*:*/dispute_management_backend.git:${TAG}").push("latest")
                }
            }
         }
@@ -40,7 +40,7 @@ stages{
         }
         steps{
             sshagent(['ebdev']) {
-                sh 'ssh -o StrictHostKeyChecking=no -l  ebdevuat 10.1.22.72      "docker stop dispute-api | true;     docker rm dispute-api | true;     docker run -v /mnt/dispute:/var/storage -p 9000:8080 -d --restart=always --name dispute-api 10.1.12.73:5000/dispute_management_backend.git:latest"'
+                sh 'ssh -o StrictHostKeyChecking=no -l  test *.*.*.*    "docker stop dispute-api | true;     docker rm dispute-api | true;     docker run -v /mnt/dispute:/var/storage -p 9000:8080 -d --restart=always --name dispute-api *.*.*.*:*/dispute_management_backend.git:latest"'
             }
         }
     }
@@ -51,7 +51,7 @@ stages{
         }
         steps{
              sshagent(['enat-remedy-production']) {
-                    sh 'ssh -o StrictHostKeyChecking=no -l  administrator 10.1.12.70      "docker stop dispute-api | true;     docker rm dispute-api | true;     docker run -v /mnt/dispute:/var/storage -p 9000:8080 -e "SPRING_PROFILES_ACTIVE=prod" -d --restart=always --name dispute-api 10.1.12.73:5000/dispute_management_backend.git:${TAG}"'
+                    sh 'ssh -o StrictHostKeyChecking=no -l  administrator *.*.*.*      "docker stop dispute-api | true;     docker rm dispute-api | true;     docker run -v /mnt/dispute:/var/storage -p 9000:8080 -e "SPRING_PROFILES_ACTIVE=prod" -d --restart=always --name dispute-api *.*.*.*:*/dispute_management_backend.git:${TAG}"'
                 }
 
 
